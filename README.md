@@ -35,3 +35,9 @@ Aplicacion para la gestion de datos personales
 
 
 /ui_consultaLLM
+
+
+/api_consultaLLM
+
+
+/db
