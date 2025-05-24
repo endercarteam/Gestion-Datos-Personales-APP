@@ -1,31 +1,21 @@
 from flask import Flask
-from app.routes import api
+from flask_sqlalchemy import SQLAlchemy
+from models import db
 import os
-from app import db
-import sqlalchemy.exc
-import time
-load_dotenv()  
+from routes import api
 
+def create_app():
     app = Flask(__name__)
-    # 2. Lee la URI desde la variable de entorno
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URI')
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
-    db.init_app(app)
-    app.register_blueprint(api)
-
-    with app.app_context():
-        for _ in range(10):
-            try:
-                db.create_all()
-                break
-            except sqlalchemy.exc.OperationalError:
-                print("⏳ Esperando a que la base de datos esté lista…")
-                time.sleep(1)
+    # Configuración de la base de datos
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:password@db:3306/gestion_datos_personales'
+    app.congig['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    db.init_app(app)    
+    # Registrar blueprints
+    app.register_blueprint(api, url_prefix='/api')
 
     return app
 
 if __name__ == '__main__':
     app = create_app()
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5000, debug=True)
