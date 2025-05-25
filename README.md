@@ -46,19 +46,27 @@ Aplicacion para la gestion de datos personales
 api routes:
 
 - api_actualizar:
+  
   @api.route('/usuarios/<int:id_persona>', methods=['PUT'])
   
 - api_borrar
+  
   @api.route('/eliminar/<int:id_persona>', methods=['DELETE'])
   
 - api_consultausuarios:
+  
   @api.route('/usuarios', methods=['GET'])
   
-- api_registrar
+- api_registrar:
+  
   @api.route('/usuarios', methods=['POST'])
 
-- api_consultalogs
-  - listar todos los logs
+- api_consultalogs:
+  
+  - listar todos los logs:
+    
     @api.route('/logs', methods=['GET'])
-  - buscar por filtros (id, fecha, accion, tipo de documento)
+  
+  - buscar por filtros (id, fecha, accion, tipo de documento):
+    
     @api.route('/logs/buscar', methods=['GET'])
