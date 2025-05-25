@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from app.controllers.persona_controller import PersonaController
+from .controlers.persona_controller import PersonaController
 
 api = Blueprint('api', __name__)
 
