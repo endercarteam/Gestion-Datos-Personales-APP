@@ -47,26 +47,32 @@ api routes:
 
 - api_actualizar:
   
-  @api.route('/usuarios/<int:id_persona>', methods=['PUT'])
+  http://localhost:5002/api/usuarios/id_persona
   
 - api_borrar
   
-  @api.route('/eliminar/<int:id_persona>', methods=['DELETE'])
+  http://localhost:5003/api/eliminar/id_persona
   
 - api_consultausuarios:
   
-  @api.route('/usuarios', methods=['GET'])
+  - listar todos los usuarios:
+    
+    http://localhost:5001/api/usuarios
+  
+  -buscar por id:
+
+    http://localhost:5001/api/usuarios/id_persona
   
 - api_registrar:
   
-  @api.route('/usuarios', methods=['POST'])
+  http://localhost:5000/api/usuarios
 
 - api_consultalogs:
   
   - listar todos los logs:
     
-    @api.route('/logs', methods=['GET'])
+    http://localhost:5004/api/logs
   
   - buscar por filtros (id, fecha, accion, tipo de documento):
     
-    @api.route('/logs/buscar', methods=['GET'])
+    http://localhost:5004/api/logs/buscar?filtro=valor&filtro=valor
