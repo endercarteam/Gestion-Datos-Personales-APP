@@ -3,7 +3,7 @@ from controlers.persona_controller import ActualizarController
 
 api = Blueprint('actualizar_api', __name__)
 
-@api.route('/persona/<int:id_persona>', methods=['PUT'])
+@api.route('/usuarios/<int:id_persona>', methods=['PUT'])
 def actualizar_persona(id_persona):
     try:
         data = request.get_json()

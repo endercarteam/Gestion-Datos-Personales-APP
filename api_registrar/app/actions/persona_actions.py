@@ -7,6 +7,7 @@ class PersonaActions:
         try:
             # Crear nueva persona
             nueva_persona = Persona(
+                id_persona=data['id_persona'],
                 primer_nombre=data['primer_nombre'],
                 segundo_nombre=data.get('segundo_nombre'),
                 apellidos=data['apellidos'],
@@ -15,7 +16,6 @@ class PersonaActions:
                 correo=data['correo'],
                 celular=data['celular'],
                 tipo_documento=data['tipo_documento'],
-                nro_documento=data['nro_documento'],
                 foto=data.get('foto')
             )
 

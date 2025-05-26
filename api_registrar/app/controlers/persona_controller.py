@@ -5,9 +5,8 @@ class PersonaController:
     @staticmethod
     def registrar_persona(data):
         # Validar campos requeridos
-        required_fields = ['primer_nombre', 'apellidos', 'fecha_nacimiento',
-                          'genero', 'correo', 'celular', 'tipo_documento',
-                          'nro_documento']
+        required_fields = ['id_persona','primer_nombre', 'apellidos', 'fecha_nacimiento',
+                          'genero', 'correo', 'celular', 'tipo_documento']
 
         for field in required_fields:
             if field not in data or not data[field]:

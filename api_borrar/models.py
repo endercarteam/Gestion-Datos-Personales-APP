@@ -5,7 +5,6 @@ db = SQLAlchemy()
 
 class Persona(db.Model):
     __tablename__ = 'persona'
-    activo = db.Column(db.Boolean, default=True, nullable=False)
     id_persona = db.Column(db.Integer, primary_key=True)
     primer_nombre = db.Column(db.String(30), nullable=False)
     segundo_nombre = db.Column(db.String(30))
@@ -15,7 +14,6 @@ class Persona(db.Model):
     correo = db.Column(db.String(100))
     celular = db.Column(db.String(10))
     tipo_documento = db.Column(db.Enum('Tarjeta de identidad', 'Cédula'))
-    nro_documento = db.Column(db.String(10))
     foto = db.Column(db.String(255))
 
     def to_dict(self):
@@ -27,7 +25,7 @@ class Log(db.Model):
     id_log = db.Column(db.Integer, primary_key=True)
     accion = db.Column(db.String(50), nullable=False)
     fecha = db.Column(db.DateTime, default=datetime.utcnow)
-    id_persona = db.Column(db.Integer, db.ForeignKey('persona.id_persona'), nullable=True)
+    id_persona = db.Column(db.Integer, nullable=False)
 
     def to_dict(self):
         return {

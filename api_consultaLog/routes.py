@@ -11,8 +11,8 @@ def listar_logs():
 def buscar_logs():
     try:
         filtros = {
+            'id_persona': request.args.get('id_persona'),
             'tipo_documento': request.args.get('tipo_documento'),
-            'nro_documento': request.args.get('nro_documento'),
             'fecha': request.args.get('fecha'),
             'accion': request.args.get('accion')
         }

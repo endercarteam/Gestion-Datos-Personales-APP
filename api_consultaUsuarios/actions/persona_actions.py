@@ -16,6 +16,9 @@ class UsuarioActions:
         try:
             persona = Persona.query.get(id_persona)
             if persona:
+                log = Log(accion="consulta",id_persona=id_persona)
+                db.session.add(log)
+                db.session.commit()
                 return persona.to_dict()
             return None
         except Exception as e:

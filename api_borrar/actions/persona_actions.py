@@ -1,26 +1,21 @@
 from models import db, Persona, Log
 
 class PersonaActions:
-  @staticmethod
-  def eliminar_persona(id_persona):
-      try:
-          persona = Persona.query.get(id_persona)
-          if not persona:
-              return {'error': 'Persona no encontrada'}, 404
+  def borrar_persona_db(id_persona):
+      persona = Persona.query.get(id_persona)
+    
+      if not persona:
+          return {'error': f'Persona con ID {id_persona} no encontrada.'}
 
-          persona.activo = False  # Soft delete
-          db.session.commit()
-  
-          # Registrar en logs
-          log = Log(
-              accion='eliminar',
-              id_persona=id_persona
-          )
-          db.session.add(log)
-          db.session.commit()
+    # Copiar el ID al log antes de eliminar
+      log = Log(
+          accion='eliminar',
+          id_persona=id_persona  # ← Simple copia, no FK
+      )
+      db.session.add(log)
 
-          return {'message': 'Persona desactivada correctamente'}
-      except Exception as e:
-          db.session.rollback()
-          raise Exception(f"Error al eliminar persona: {str(e)}")
+      db.session.delete(persona)
+      db.session.commit()
+
+      return {'mensaje': f'Persona con ID {id_persona} eliminada correctamente.'}
 

@@ -12,8 +12,18 @@ class LogController:
 
     def buscar_logs(filtros):
         try:
-            return LogActions.buscar_logs(filtros)
-        except ValueError as ve:
-            raise ValueError(str(ve))
+          resultados = LogActions.buscar_logs(filtros)
+
+          logs = []
+          for log in resultados:
+              logs.append({
+                  "id_log": log.id_log,
+                  "accion": log.accion,
+                  "fecha": log.fecha.strftime('%Y-%m-%d %H:%M:%S'),
+                  "id_persona": log.id_persona
+              })
+          
+          return logs
+          
         except Exception as e:
-            raise Exception(f"Error al buscar logs: {str(e)}")
+          return jsonify({"error": f"Error al buscar logs: {str(e)}"}), 500
