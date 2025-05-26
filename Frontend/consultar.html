@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultar Datos - Gestión de Datos Personales</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Gestión de Datos Personales</h1>
+    </header>
+    
+    <div class="container">
+        <h2 class="form-title">Consultar Datos Personales</h2>
+        <hr>
+        
+        <div class="query-container">
+            <div class="filter-panel">
+                <form id="consulta-form" class="filter-form">
+                    <div class="form-group">
+                        <label for="tipo-documento">Tipo de Documento</label>
+                        <select id="tipo-documento" name="tipo-documento">
+                            <option value="" selected>Todos</option>
+                            <option value="TI">Tarjeta de Identidad</option>
+                            <option value="CC">Cédula</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="nro-documento">Nro. de Documento</label>
+                        <input type="text" id="nro-documento" name="nro-documento">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="primer-nombre">Primer Nombre</label>
+                        <input type="text" id="primer-nombre" name="primer-nombre">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="segundo-nombre">Segundo Nombre</label>
+                        <input type="text" id="segundo-nombre" name="segundo-nombre">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="apellidos">Apellidos</label>
+                        <input type="text" id="apellidos" name="apellidos">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="genero">Género</label>
+                        <select id="genero" name="genero">
+                            <option value="" selected>Todos</option>
+                            <option value="M">Masculino</option>
+                            <option value="F">Femenino</option>
+                            <option value="NB">No binario</option>
+                            <option value="NR">Prefiero no reportar</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="fecha-nacimiento">Fecha de Nacimiento</label>
+                        <input type="date" id="fecha-nacimiento" name="fecha-nacimiento">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="correo">Correo Electrónico</label>
+                        <input type="email" id="correo" name="correo">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="celular">Celular</label>
+                        <input type="tel" id="celular" name="celular">
+                    </div>
+                    
+                    <div class="form-actions">
+                        <a href="index.html" class="btn btn-secondary">Atrás</a>
+                        <button type="submit" class="btn btn-primary">Consultar</button>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="results-panel">
+                <div class="table-container">
+                    <table id="resultados-tabla">
+                        <thead>
+                            <tr>
+                                <th>Tipo Doc</th>
+                                <th>Número</th>
+                                <th>Nombres</th>
+                                <th>Apellidos</th>
+                                <th>Género</th>
+                                <th>Correo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Los resultados se cargarán dinámicamente con JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/app.js"></script>
+</body>
+</html>
