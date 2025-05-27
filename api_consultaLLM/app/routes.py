@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from .controlers.persona_controller import PersonaController
+from app.controller import LLMControler 
 
 api = Blueprint('api', __name__)
 
@@ -11,7 +11,7 @@ def querry_llm():
 		return jsonfy({"error": "Se requiere una consulta"}), 400
 
 	try:
-		response = gemini_service.process_query(data['query'])
+		response = controller.process_query(data['query'])
 		return jsonify({"response": response})
 
 	except Exception  as e:
