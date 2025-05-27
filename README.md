@@ -48,6 +48,7 @@ api routes:
 - api_actualizar:
   
   http://localhost:5002/api/usuarios/id_persona
+  Method: 'PUT'
   
 - api_borrar
   
@@ -66,7 +67,7 @@ api routes:
 - api_registrar:
   
   http://localhost:5000/api/usuarios
-
+  Method: 'Post'
 - api_consultalogs:
   
   - listar todos los logs:
