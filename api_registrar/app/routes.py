@@ -1,20 +1,15 @@
 from flask import Blueprint, request, jsonify
-from app.models import Person
-from app import db
+from .controlers.persona_controller import PersonaController
 
 api = Blueprint('api', __name__)
 
-@api.route('/add_person', methods=['POST'])
-def add_person():
-    data = request.get_json()
-    name = data.get('name')
-    age = data.get('age')
-
-    if not name or not isinstance(age, int):
-        return jsonify({'error': 'Invalid input'}), 400
-
-    person = Person(name=name, age=age)
-    db.session.add(person)
-    db.session.commit()
-
-    return jsonify({'message': f'Person {name} added.'}), 201
+@api.route('/usuarios', methods=['POST'])
+def registrar_persona():
+    try:
+        data = request.get_json()
+        result = PersonaController.registrar_persona(data)
+        return jsonify(result), 201
+    except ValueError as e:
+        return jsonify({'error': str(e)}), 400
+    except Exception as e:
+        return jsonify({'error': f'Error interno: {str(e)}'}), 500

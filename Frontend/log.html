@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultar Log - Gestión de Datos Personales</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Gestión de Datos Personales</h1>
+    </header>
+    
+    <div class="container">
+        <h2 class="form-title">Consultar Log</h2>
+        <hr>
+        
+        <div class="query-container">
+            <div class="filter-panel">
+                <form id="log-form" class="filter-form">
+                    <div class="form-group">
+                        <label for="tipo-transaccion">Tipo de Transacción</label>
+                        <select id="tipo-transaccion" name="tipo-transaccion">
+                            <option value="" selected>Todas</option>
+                            <option value="crear">Crear</option>
+                            <option value="modificar">Modificar</option>
+                            <option value="eliminar">Eliminar</option>
+                            <option value="consultar">Consultar</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="nro-documento">Nro. de Documento</label>
+                        <input type="text" id="nro-documento" name="nro-documento">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="fecha">Fecha</label>
+                        <input type="date" id="fecha" name="fecha">
+                    </div>
+                    
+                    <div class="form-actions">
+                        <a href="index.html" class="btn btn-secondary">Atrás</a>
+                        <button type="submit" class="btn btn-primary">Consultar</button>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="results-panel">
+                <div class="table-container">
+                    <table id="log-tabla">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Hora</th>
+                                <th>Usuario</th>
+                                <th>Acción</th>
+                                <th>Documento</th>
+                                <th>Detalles</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Los resultados se cargarán dinámicamente con JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/app.js"></script>
+</body>
+</html>
