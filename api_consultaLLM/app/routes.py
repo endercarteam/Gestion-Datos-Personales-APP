@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from app.controller import LLMControler 
+from app.controller import LLMController 
 
 api = Blueprint('api', __name__)
 
