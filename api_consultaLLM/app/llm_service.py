@@ -6,7 +6,7 @@ from langchain.vectorstores import FAISS
 from langchain.docstore.document import Document
 from app.models import db, Persona, Log
 
-class GeminiServiceRAG:
+class GeminiService:
     def __init__(self):
         # Configuración de API
         api_key = os.getenv("GOOGLE_API_KEY")
@@ -143,8 +143,9 @@ class GeminiServiceRAG:
         return None
 
     def process_query(self, user_query):
-	self.refresh_vector_store()
-	"""Procesa una consulta en lenguaje natural usando RAG"""
+        """Procesa una consulta en lenguaje natural usando RAG"""
+        self.refresh_vector_store()
+
         # Paso 1: Realizar búsqueda semántica
         semantic_results = self.semantic_search(user_query)
 
