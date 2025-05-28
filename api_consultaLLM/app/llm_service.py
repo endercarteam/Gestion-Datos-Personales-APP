@@ -14,7 +14,7 @@ class GeminiService:
             raise ValueError("GOOGLE_API_KEY no está configurada en las variables de entorno")
 
         genai.configure(api_key=api_key)
-        self.model = genai.GenerativeModel('gemini-pro')
+        self.model = genai.GenerativeModel('gemini-1.5-pro')
         self.embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
 
         # Inicializar vector store
@@ -143,68 +143,73 @@ class GeminiService:
         return None
 
     def process_query(self, user_query):
-        """Procesa una consulta en lenguaje natural usando RAG"""
-        self.refresh_vector_store()
+    	"""Procesa una consulta en lenguaje natural usando RAG"""
+    	self.refresh_vector_store()
 
-        # Paso 1: Realizar búsqueda semántica
-        semantic_results = self.semantic_search(user_query)
+    	# Paso 1: Realizar búsqueda semántica
+    	semantic_results = self.semantic_search(user_query)
 
-        # Extraer el contenido relevante de los resultados
-        retrieved_contexts = []
-        for doc in semantic_results:
-            retrieved_contexts.append(doc.page_content)
+    	# Extraer el contenido relevante de los resultados
+    	retrieved_contexts = []
+    	for doc in semantic_results:
+        	retrieved_contexts.append(doc.page_content)
 
-        # Paso 2: Como respaldo, también realizar la búsqueda estructurada original
-        # Determinar qué tipo de consulta es
-        query_analysis = self.model.generate_content([
-            self.system_prompt,
-            f"Analiza esta consulta: '{user_query}'. ¿Qué tipo de información está solicitando el usuario? "
-            "Responde con una de estas opciones: 'all_personas', 'persona_by_id', 'personas_by_name', 'recent_logs', 'general'. "
-            "Si necesita un ID específico, responde con 'persona_by_id:ID'. "
-            "Si busca por nombre, responde con 'personas_by_name:NOMBRE'."
-        ]).text
+    	# Paso 2: Como respaldo, también realizar la búsqueda estructurada original
+    	# Determinar qué tipo de consulta es
+    	query_analysis = self.model.generate_content(
+        	f"{self.system_prompt} \n \nAnaliza esta consulta: '{user_query}'. ¿Qué tipo de información está solicitando el usuario? "
+        	"Responde con una de estas opciones: 'all_personas', 'persona_by_id', 'personas_by_name', 'recent_logs', 'general'. "
+        	"Si necesita un ID específico, responde con 'persona_by_id:ID'. "
+        	"Si busca por nombre, responde con 'personas_by_name:NOMBRE'.").text
 
-        # Extraer datos según el análisis
-        structured_data = None
-        if "all_personas" in query_analysis:
-            structured_data = self.query_database("all_personas")
-        elif "persona_by_id" in query_analysis:
-            try:
-                id_part = query_analysis.split(":")[1].strip()
-                id_value = int(''.join(filter(str.isdigit, id_part)))
-                structured_data = self.query_database("persona_by_id", {"id": id_value})
-            except:
-                structured_data = None
-        elif "personas_by_name" in query_analysis:
-            try:
-                name_part = query_analysis.split(":")[1].strip()
-                structured_data = self.query_database("personas_by_name", {"name": name_part})
-            except:
-                structured_data = None
-        elif "recent_logs" in query_analysis:
-            structured_data = self.query_database("recent_logs")
+    	# Extraer datos según el análisis
+    	structured_data = None
+    	if "all_personas" in query_analysis:
+        	structured_data = self.query_database("all_personas")
+    	elif "persona_by_id" in query_analysis:
+        	try:
+            		id_part = query_analysis.split(":")[1].strip()
+            		id_value = int(''.join(filter(str.isdigit, id_part)))
+            		structured_data = self.query_database("persona_by_id", {"id": id_value})
+        	except:
+            		structured_data = None
+    	elif "personas_by_name" in query_analysis:
+        	try:
+            		name_part = query_analysis.split(":")[1].strip()
+            		structured_data = self.query_database("personas_by_name", {"name": name_part})
+        	except:
+            		structured_data = None
+    	elif "recent_logs" in query_analysis:
+        	structured_data = self.query_database("recent_logs")
 
-        # Paso 3: Combinar resultados de ambos métodos
-        context = ""
+    	# Paso 3: Combinar resultados de ambos métodos
+    	context = ""
 
-        # Añadir resultados de búsqueda semántica
-        if retrieved_contexts:
-            context += "Resultados de búsqueda semántica:\n"
-            for i, ctx in enumerate(retrieved_contexts, 1):
-                context += f"Resultado {i}:\n{ctx}\n\n"
+    	# Añadir resultados de búsqueda semántica
+    	if retrieved_contexts:
+        	context += "Resultados de búsqueda semántica: \n"
+        	for i, ctx in enumerate(retrieved_contexts, 1):
+            		context += f"Resultado {i}: \n {ctx} \n \n"
 
-        # Añadir resultados de búsqueda estructurada
-        if structured_data:
-            context += f"\nResultados de búsqueda estructurada:\n{structured_data}\n"
+    	# Añadir resultados de búsqueda estructurada
+    	if structured_data:
+        	context += f" \n Resultados de búsqueda estructurada: \n {structured_data} \n"
 
-        if not context:
-            context = "No se encontraron datos relevantes."
+    	if not context:
+        	context = "No se encontraron datos relevantes."
 
-        # Paso 4: Generar respuesta con el LLM usando el contexto combinado
-        response = self.model.generate_content([
-            self.system_prompt,
-            {"role": "system", "parts": ["Usa la siguiente información para responder a la consulta del usuario. Si la información no es suficiente, indica que no tienes suficientes datos para responder. Responde siempre en español y de manera natural y conversacional."]},
-            {"role": "user", "parts": [f"Contexto: {context}\n\nConsulta del usuario: {user_query}"]},
-        ])
+    	# Paso 4: Generar respuesta con el LLM usando el contexto combinado
+    	prompt = f"""
+    	{self.system_prompt}
 
-        return response.text
+    	Usa la siguiente información para responder a la consulta del usuario. Si la información no es suficiente,
+    	indica que no tienes suficientes datos para responder. Responde siempre en español y de manera natural y conversacional.
+
+    	Contexto: {context}
+
+    	Consulta del usuario: {user_query}
+    	"""
+
+    	response = self.model.generate_content(prompt)
+
+    	return response.text
